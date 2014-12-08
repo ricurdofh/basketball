@@ -5,10 +5,10 @@ var jsdom = require('jsdom'),
 
 var addData = function (game, team, totalPoints, periodPoints, pos, $, time) {
     if(typeof time !== 'undefined'){
-        game.time = game.time !== time ? time : game.time;
+        game.time = time;
     }                                    
-    game['team'+pos] = game['team'+pos] !== team ? team : game['team'+pos];
-    game['totalPoints'+pos] = game['totalPoints'+pos] !== totalPoints ? totalPoints : game['totalPoints'+pos];
+    game['team'+pos] = team;
+    game['totalPoints'+pos] = totalPoints;
     game['firstPeriodPoints'+pos] = $(periodPoints[0]).text().trim();
     game['secondPeriodPoints'+pos] = $(periodPoints[1]).text().trim();
     game['thirdPeriodPoints'+pos] = $(periodPoints[2]).text().trim();
@@ -25,7 +25,6 @@ jsdom.env({
         var $ = window.jQuery,
             game, league;
         $('.league-multi').each(function () {
-            debugger;
             var cont = 0,
                 teamsArray = [],
                 dateCont = -1, 

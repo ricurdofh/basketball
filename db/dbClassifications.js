@@ -5,6 +5,9 @@ var db = require('./dbConnection');
 var classificationsSchema = db.Schema({
     team : String,
     league : String,
+    type : String,
+    conference : String,
+    division: String,
     played : Number,
     wins : Number,
     losts : Number,
