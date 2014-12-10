@@ -4,40 +4,40 @@ var jsdom = require('jsdom'),
     Games = require('./db/dbGames');
 
 var addData = function (game, team, totalPoints, periodPoints, pos, $, time) {
-    if(typeof time !== 'undefined'){
+    if (time !== undefined) {
         game.time = time;
-    }                                    
-    game['team'+pos] = team;
-    game['totalPoints'+pos] = totalPoints;
-    game['firstPeriodPoints'+pos] = $(periodPoints[0]).text().trim();
-    game['secondPeriodPoints'+pos] = $(periodPoints[1]).text().trim();
-    game['thirdPeriodPoints'+pos] = $(periodPoints[2]).text().trim();
-    game['fourthPeriodPoints'+pos] = $(periodPoints[3]).text().trim();
-    game['fifthPeriodPoints'+pos] = $(periodPoints[4]).text().trim();
+    }
+    game['team' + pos] = team;
+    game['totalPoints' + pos] = totalPoints;
+    game['firstPeriodPoints' + pos] = $(periodPoints[0]).text().trim();
+    game['secondPeriodPoints' + pos] = $(periodPoints[1]).text().trim();
+    game['thirdPeriodPoints' + pos] = $(periodPoints[2]).text().trim();
+    game['fourthPeriodPoints' + pos] = $(periodPoints[3]).text().trim();
+    game['fifthPeriodPoints' + pos] = $(periodPoints[4]).text().trim();
 
     return game;
-}
+};
 
 jsdom.env({
     url : 'http://www.livescore.com/basketball/',
     scripts : ['https://code.jquery.com/jquery-2.1.1.min.js'],
     done : function (err, window) {
         var $ = window.jQuery,
-            game, league;
+            league;
         $('.league-multi').each(function () {
             var cont = 0,
                 teamsArray = [],
-                dateCont = -1, 
+                dateCont = -1,
                 date = [];
             league = $(this).find('.league').text().trim();
             $(this).find('.date').each(function () {
-               date.push($(this).text().trim()); 
+                date.push($(this).text().trim());
             });
 
             $(this).find('tr').each(function () {
-                if(typeof $(this).attr('class') === 'undefined') {
+                if ($(this).attr('class') === undefined) {
                     dateCont += 1;
-                } else if($(this).attr('class') === 'even' || $(this).attr('class') === '') {
+                } else if ($(this).attr('class') === 'even' || $(this).attr('class') === '') {
 
                     // Se obtienen datos locales del primero de los equipos del juego
                     var time = $(this).find('.fd').text().trim(),
@@ -55,13 +55,13 @@ jsdom.env({
                     teamsArray[cont].totalPoints1 = totalPoints1;
                     teamsArray[cont].periodPoints1 = periodPoints1;
 
-                } else if($(this).attr('class') === 'awy ' || $(this).attr('class') === 'awy even') {
+                } else if ($(this).attr('class') === 'awy ' || $(this).attr('class') === 'awy even') {
 
                     // Se obtienen datos locales del segundo de los equipos del juego
                     var team2 = $(this).find('.ft').text().trim(),
                         totalPoints2 = $(this).find('.fs').text().trim(),
                         periodPoints2 = $(this).find('.fp'),
-                        localCont = cont; 
+                        localCont = cont;
                         // Esta última es una variable contadora local que identifica
                         // la posición actual en el closure de la función callback
 
@@ -72,17 +72,17 @@ jsdom.env({
                     teamsArray[cont].periodPoints2 = periodPoints2;
 
                     Games.findOne({
-                        league : teamsArray[cont].league, 
+                        league : teamsArray[cont].league,
                         date : teamsArray[cont].date,
                         team1 : teamsArray[cont].team1
                     }, function (err, game) {
                         var data = teamsArray[localCont];
 
-                        if(!game) {
+                        if (!game) {
                             game = new Games({
                                 league : data.league,
                                 date : data.date
-                            });                                        
+                            });
                         }
 
                         game = addData(game, data.team1, data.totalPoints1, data.periodPoints1, 1, $, data.time);
