@@ -6,7 +6,7 @@ var jsdom = require('jsdom'),
 var addData = function (game, team, totalPoints, periodPoints, pos, $, time) {
     if (time !== undefined) {
         game.time = time;
-        game.isLive = /^(\d)?Q/.test(time);
+        game.isLive = /^(\d)?Q/.test(time) || time === 'HT';
     }
     game['team' + pos] = team;
     game['totalPoints' + pos] = totalPoints;
