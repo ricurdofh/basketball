@@ -8,6 +8,7 @@ var gamesSchema = db.Schema({
     time : String,
     team1 : String,
     team2 : String,
+    isLive : Boolean,
     totalPoints1 : String,
     totalPoints2 : String,
     firstPeriodPoints1 : String,
