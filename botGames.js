@@ -3,13 +3,16 @@
 var jsdom = require('jsdom'),
     Games = require('./db/dbGames');
 
-var addData = function (game, team, totalPoints, periodPoints, pos, $, time) {
-    if (time !== undefined) {
-        game.time = time;
-        game.isLive = /^(\d)?Q/.test(time) || time === 'HT';
+var addData = function (game, teamData, $) {
+    var pos = teamData.pos,
+        periodPoints = teamData.periodPoints;
+
+    if (teamData.time !== undefined) {
+        game.time = teamData.time;
+        game.isLive = teamData.isLive;
     }
-    game['team' + pos] = team;
-    game['totalPoints' + pos] = totalPoints;
+    game['team' + pos] = teamData.name;
+    game['totalPoints' + pos] = teamData.totalPoints;
     game['firstPeriodPoints' + pos] = $(periodPoints[0]).text().trim();
     game['secondPeriodPoints' + pos] = $(periodPoints[1]).text().trim();
     game['thirdPeriodPoints' + pos] = $(periodPoints[2]).text().trim();
@@ -42,6 +45,7 @@ jsdom.env({
 
                     // Se obtienen datos locales del primero de los equipos del juego
                     var time = $(this).find('.fd').text().trim(),
+                        isLive = $(this).find('.fd').find('img').attr('alt') === 'live',
                         team1 = $(this).find('.ft').text().trim(),
                         totalPoints1 = $(this).find('.fs').text().trim(),
                         periodPoints1 = $(this).find('.fp');
@@ -52,6 +56,7 @@ jsdom.env({
                     teamsArray[cont].league = league;
                     teamsArray[cont].date = date[dateCont];
                     teamsArray[cont].time = time;
+                    teamsArray[cont].isLive = isLive;
                     teamsArray[cont].team1 = team1;
                     teamsArray[cont].totalPoints1 = totalPoints1;
                     teamsArray[cont].periodPoints1 = periodPoints1;
@@ -77,7 +82,9 @@ jsdom.env({
                         date : teamsArray[cont].date,
                         team1 : teamsArray[cont].team1
                     }, function (err, game) {
-                        var data = teamsArray[localCont];
+                        var data = teamsArray[localCont],
+                            team1Data,
+                            team2Data;
 
                         if (!game) {
                             game = new Games({
@@ -86,9 +93,25 @@ jsdom.env({
                             });
                         }
 
-                        game = addData(game, data.team1, data.totalPoints1, data.periodPoints1, 1, $, data.time);
+                        team1Data = {
+                            name : data.team1,
+                            totalPoints : data.totalPoints1,
+                            periodPoints : data.periodPoints1,
+                            pos : 1,
+                            isLive : data.isLive,
+                            time : data.time
+                        };
 
-                        game = addData(game, data.team2, data.totalPoints2, data.periodPoints2, 2, $);
+                        game = addData(game, team1Data, $);
+
+                        team2Data = {
+                            name : data.team2,
+                            totalPoints : data.totalPoints2,
+                            periodPoints : data.periodPoints2,
+                            pos : 2
+                        };
+
+                        game = addData(game, team2Data, $);
 
                         game.save();
                     });
