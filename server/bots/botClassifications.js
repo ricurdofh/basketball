@@ -2,11 +2,20 @@
 
 var jsdom = require('jsdom'),
     Curl = require('node-libcurl').Curl,
-    Classifications = require('./db/dbClassifications');
+    Classifications = require('../models/dbClassifications'),
+    Leagues = require('../models/dbLeagues');
 
 var logError = function (msg, err) {
     console.error(msg);
     console.error(err);
+};
+
+var createLeague = function (league, conference, division) {
+    return new Leagues({
+        league : league,
+        hasConf : conference,
+        hasDiv : division
+    });
 };
 
 var makeTable = function (url, league, type, lt) {
@@ -37,27 +46,35 @@ var makeTable = function (url, league, type, lt) {
                             $('.league-wc.table.mtn.bbn').find('tr').each(function () {
                                 if (/^ (.*)/.test($(this).attr('class')) || /^even (.*)/.test($(this).attr('class'))) {
                                     var data = $(this).find('td');
-                                    Classifications.findOne({
-                                        team : $(data[2]).text().trim(),
-                                        league : league,
-                                        type : type
-                                    }, function (err, classif) {
-                                        console.log('class findone ' + url);
-                                        if (!classif) {
-                                            classif = new Classifications({
-                                                team : $(data[2]).text().trim(),
-                                                league : league,
-                                                type : type
-                                            });
+                                    Leagues.findOne({
+                                        league : league
+                                    }, function (err, exist) {
+                                        if(!exist) {
+                                            exist = createLeague(league, false, false);
                                         }
-                                        classif.played = $(data[3]).text().trim();
-                                        classif.wins = $(data[4]).text().trim();
-                                        classif.losts = $(data[5]).text().trim();
-                                        classif.goalsFor = $(data[6]).text().trim();
-                                        classif.goalsAgainst = $(data[7]).text().trim();
-                                        classif.goalsDiff = $(data[8]).text().trim();
-                                        classif.points = $(data[9]).text().trim();
-                                        classif.save();
+                                        Classifications.findOne({
+                                            team : $(data[2]).text().trim(),
+                                            league_id : exist._id,
+                                            type : type
+                                        }, function (err, classif) {
+                                            console.log('class findone ' + url);
+                                            if (!classif) {
+                                                classif = new Classifications({
+                                                    team : $(data[2]).text().trim(),
+                                                    league_id : exist._id,
+                                                    league : league,
+                                                    type : type
+                                                });
+                                            }
+                                            classif.played = $(data[3]).text().trim();
+                                            classif.wins = $(data[4]).text().trim();
+                                            classif.losts = $(data[5]).text().trim();
+                                            classif.goalsFor = $(data[6]).text().trim();
+                                            classif.goalsAgainst = $(data[7]).text().trim();
+                                            classif.goalsDiff = $(data[8]).text().trim();
+                                            classif.points = $(data[9]).text().trim();
+                                            classif.save();
+                                        });
                                     });
                                 }
                             });
@@ -65,10 +82,30 @@ var makeTable = function (url, league, type, lt) {
                                 if ($('.content').find('.cal-wrap.cal-wrap3').find('a').text().search('Conference') !== -1) {
                                     urlLocal = url.replace('lt=1', 'lt=11');
                                     makeTable(urlLocal, league, type, 'conference');
+                                    Leagues.findOne({
+                                        league : league
+                                    }, function (err, exist) {
+                                        if(exist) {
+                                            exist.hasConf = true;
+                                        } else {
+                                            exist = createLeague(league, true, false);
+                                        }
+                                        exist.save();
+                                    });
                                 }
                                 if ($('.content').find('.cal-wrap.cal-wrap3').find('a').text().search('Division') !== -1) {
                                     urlLocal = url.replace('lt=1', 'lt=21');
                                     makeTable(urlLocal, league, type, 'division');
+                                    Leagues.findOne({
+                                        league : league
+                                    }, function (err, exist) {
+                                        if(exist) {
+                                            exist.hasDiv = true;
+                                        } else {
+                                            exist = createLeague(league, false, true);
+                                        }
+                                        exist.save();
+                                    });
                                 }
                             }
                         } else if (lt === 'conference' || lt === 'division') {
@@ -83,16 +120,23 @@ var makeTable = function (url, league, type, lt) {
                                             var data = $(this).find('td'),
                                                 attLocal = att,
                                                 valLocal = val;
-                                            Classifications.findOne({
-                                                team : $(data[2]).text().trim(),
-                                                league : league,
-                                                type : type
-                                            }, function (err, classif) {
-                                                console.log('classif findone ' + url);
-                                                if (!err) {
-                                                    classif[attLocal] = valLocal;
-                                                    classif.save();
+                                            Leagues.findOne({
+                                                league : league
+                                            }, function (err, exist) {
+                                                if (!exist){
+                                                    exist = createLeague(league, attLocal === 'conference', attLocal === 'division');
                                                 }
+                                                Classifications.findOne({
+                                                    team : $(data[2]).text().trim(),
+                                                    league_id : exist._id,
+                                                    type : type
+                                                }, function (err, classif) {
+                                                    console.log('classif findone ' + url);
+                                                    if (!err) {
+                                                        classif[attLocal] = valLocal;
+                                                        classif.save();
+                                                    }
+                                                });
                                             });
                                         }
                                     });
@@ -111,6 +155,7 @@ var makeTable = function (url, league, type, lt) {
     });
     curl.on('error', function (err) {
         logError('Error on curl ' + url, err);
+        makeTable(url, league, type, lt);
         this.close();
     });
     curl.perform();

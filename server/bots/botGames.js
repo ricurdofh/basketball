@@ -1,7 +1,8 @@
 'use strict';
 
 var jsdom = require('jsdom'),
-    Games = require('./db/dbGames');
+    Games = require('../models/dbGames'),
+    Leagues = require('../models/dbLeagues');
 
 var addData = function (game, teamData, $) {
     var pos = teamData.pos,
@@ -26,14 +27,26 @@ jsdom.env({
     url : 'http://www.livescore.com/basketball/',
     scripts : ['https://code.jquery.com/jquery-2.1.1.min.js'],
     done : function (err, window) {
-        var $ = window.jQuery,
-            league;
+        var $ = window.jQuery;
         $('.league-multi').each(function () {
             var cont = 0,
                 teamsArray = [],
                 dateCont = -1,
-                date = [];
-            league = $(this).find('.league').text().trim();
+                date = [],
+                league;
+            league = $(this).find('.league strong').text() + ' ' + $(this).find('.league span a').text();
+            Leagues.findOne({
+                league : league
+            }, function (err, exist) {
+                if(!exist) {
+                    exist = new Leagues({
+                        league : league,
+                        hasConf : false,
+                        hasDiv : false
+                    });
+                    exist.save();
+                }
+            });
             $(this).find('.date').each(function () {
                 date.push($(this).text().trim());
             });

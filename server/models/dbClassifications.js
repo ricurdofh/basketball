@@ -3,8 +3,12 @@
 var db = require('./dbConnection');
 
 var classificationsSchema = db.Schema({
-    team : String,
+    league_id : {
+        type : db.Schema.Types.ObjectId,
+        ref : 'leagues'
+    },
     league : String,
+    team : String,
     type : String,
     conference : String,
     division: String,
