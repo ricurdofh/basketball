@@ -1,0 +1,78 @@
+
+:focus {
+  outline-color: transparent;
+  outline-style: none;
+}
+
+.full {
+  width: 100%
+}
+
+
+label {
+  position: relative;
+}
+
+.spacer {
+  padding: 25px 0;
+}
+
+.topcoat-tab-bar {
+  display: table;
+  table-layout: fixed;
+  white-space: no-wrap;
+  font-size: 0;
+  background: #970000;
+}
+
+.topcoat-tab-bar__item {
+  display: table-cell;
+  width: auto;
+  /* reset what was removed by tab bar */
+  font-size: 8px;
+}
+
+.topcoat-tab-bar__button {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-top: 1px solid #B7B7B7;
+  border-radius: 0px !important;
+  color: white;
+  vertical-align: top;
+  text-overflow: ellipsis;
+  text-shadow: none;
+  white-space: nowrap;
+  letter-spacing: 1px;
+  font: inherit;
+  line-height: 3rem;
+  cursor: default;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -o-text-overflow: ellipsis;
+  background: transparent;
+  height: 44px;
+}
+
+:checked + .topcoat-tab-bar__button,
+.topcoat-tab-bar__button:active,
+.topcoat-tab-bar__button.is-active {
+  color: black;
+  background-color: #FEFEFE;
+  border-bottom: 1px solid #B7B7B7;
+}
+
+.topcoat-tab-bar__item:disabled,
+.topcoat-tab-bar__item.is-disabled {
+  opacity: 0.3;
+  cursor: default;
+  pointer-events: none;
+}

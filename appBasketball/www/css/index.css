@@ -1,0 +1,78 @@
+.busqueda
+{
+    float: left;
+    width: 100%;
+}
+
+.center {
+    text-align: center;
+}
+
+.container {
+    position: relative;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0;
+}
+
+.container_dinamic {
+    float: right !important;
+    padding: 0;
+    margin: 0;
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+}
+
+.container .sixteen.columns {
+    width: 100%;
+}
+
+.fondo_container {
+    background: url('') no-repeat center center;
+}
+
+.fondo_li {
+    background: #F8F8F8;
+}
+
+.full_alto {
+    height: 100%;
+}
+
+input {
+    border: none;
+    border-radius: 6px;
+    max-width: 100%;
+    height: 27px;
+    width: 97%;
+    padding: 0;
+    font-size: 15px;
+}
+input:focus {
+  outline:none;
+  border-color:#aaa;
+}
+
+#lista li {
+    display: none;
+}
+#lista .visible {
+    display: block;
+}
+
+.red {
+    background: #970000;
+}
+
+.struct_table_container {
+    height: 100%;
+}
+
+.table_li {
+    width: 100%;
+    font-size: 12px;
+}
+
+.table_struct {
+    width: 100%;
+}
