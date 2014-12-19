@@ -1,0 +1,170 @@
+<div class="container full_alto">
+    <table class="table_struct full_alto">
+        <tbody>
+            <tr class="struct_table_header">
+                <td>
+                    <div class="sixteen columns header">
+                        <div class="logo"> 
+                            <img onclick="borrarVariablesLocales();" src="img/logos/logo.png" width="38px" height="33px">
+                        </div>
+                        <div id="iconos" class="iconos">
+                            <div id="all_live" class="font_iconos">
+                                <i onclick="app.loadGames();" id="all_list" class="fa fa-reply-all"></i>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr class="struct_table_container">
+                <td>                      
+                    <div id="container" class="sixteen columns container_dinamic fondo_container" style="height: 100%;">
+                        <table width="100%">
+                            <tbody>
+                                <tr class="">
+                                    <td class="ligaTablaClass" colspan="3">
+                                        {{league}}
+                                    </td>
+                                </tr>
+                                <tr class="">
+                                    <td id="total" class="center fonttc activetc" onclick="app.activeTab(this, 'home', 'away');">
+                                        Total
+                                    </td>
+                                    <td id="home" class="center fonttc" onclick="app.activeTab(this, 'total', 'away');">
+                                        Home
+                                    </td>
+                                    <td id="away" class="center fonttc" onclick="app.activeTab(this, 'total', 'home');">
+                                        Away
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3">
+                                        <table id="tableHeadTHA" width="100%">
+                                            <thead>
+                                                <tr>
+                                                    <th class="cincoPorNum">#</th>
+                                                    <th class="nameTeamPor">Team Name</th>
+                                                    <th class="paPor">P</th>
+                                                    <th class="paPor">W</th>
+                                                    <th class="paPor">L</th>
+                                                    <th class="paPor">F</th>
+                                                    <th class="paPor">A</th>
+                                                    <th class="paPor">GD</th>
+                                                    <th class="ptsPor">Per</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3">
+                                        <div id="contentTotal" class="contentTC" style="display: block;">
+                                            <table id="tableTotal" width="100%">
+                                                <tbody>
+                                                    {{#each total}}
+                                                    <tr class="borderBottomTd">
+                                                        <td class="cincoPorNum center">{{inc @index}}</td>
+                                                        <td class="nameTeamPor center">{{team}}</td>
+                                                        <td class="paPor center">{{played}}</td>
+                                                        <td class="paPor center">{{wins}}</td>
+                                                        <td class="paPor center">{{losts}}</td>
+                                                        <td class="paPor center">{{goalsFor}}</td>
+                                                        <td class="paPor center">{{goalsAgainst}}</td>
+                                                        <td class="paPor center">{{goalsDiff}}</td>
+                                                        <td class="paPor center">{{points}}</td>
+                                                    </tr>
+                                                    {{/each}}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div id="contentHome" class="contentTC" style="display: none;">
+                                            <table id="tableHome" width="100%">
+                                                <tbody>
+                                                    {{#each home}}
+                                                    <tr class="borderBottomTd">
+                                                        <td class="cincoPorNum center">{{inc @index}}</td>
+                                                        <td class="nameTeamPor center">{{team}}</td>
+                                                        <td class="paPor center">{{played}}</td>
+                                                        <td class="paPor center">{{wins}}</td>
+                                                        <td class="paPor center">{{losts}}</td>
+                                                        <td class="paPor center">{{goalsFor}}</td>
+                                                        <td class="paPor center">{{goalsAgainst}}</td>
+                                                        <td class="paPor center">{{goalsDiff}}</td>
+                                                        <td class="paPor center">{{points}}</td>
+                                                    </tr>
+                                                    {{/each}}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div id="contentAway" class="contentTC" style="display: none;">
+                                            <table id="tableAway" width="100%">
+                                                <tbody>
+                                                    {{#each away}}
+                                                    <tr class="borderBottomTd">
+                                                        <td class="cincoPorNum center">{{inc @index}}</td>
+                                                        <td class="nameTeamPor center">{{team}}</td>
+                                                        <td class="paPor center">{{played}}</td>
+                                                        <td class="paPor center">{{wins}}</td>
+                                                        <td class="paPor center">{{losts}}</td>
+                                                        <td class="paPor center">{{goalsFor}}</td>
+                                                        <td class="paPor center">{{goalsAgainst}}</td>
+                                                        <td class="paPor center">{{goalsDiff}}</td>
+                                                        <td class="paPor center">{{points}}</td>
+                                                    </tr>
+                                                    {{/each}}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td id="footer" class="struct_table_footer" style="display: table;">
+                    <div class="topcoat-tab-bar full">
+                        <label onclick="app.loadGames();" class="topcoat-tab-bar__item">
+                            
+                            <button id="matches" onclick="removeClass('is-active'); addClass(this,'is-active');" class="topcoat-tab-bar__button full is-active">
+                                <div class="icono_footer"><i class="fa fa-futbol-o"></i></div>
+                                <div class="text_footer">Matches</div>
+                            </button>
+                        </label>
+                        <label onclick="events();" class="topcoat-tab-bar__item">
+                            
+                            <button id="events" onclick="removeClass('is-active'); addClass(this,'is-active');" class="topcoat-tab-bar__button full">
+                                <div class="icono_footer"><i class="fa fa-bell"></i></div>
+                                <div class="text_footer">Events</div>
+                            </button>
+                        </label>
+                        <label onclick="profile();" class="topcoat-tab-bar__item">
+                            
+                            <button id="profile" onclick="removeClass('is-active'); addClass(this,'is-active');" class="topcoat-tab-bar__button full">
+                                <div class="icono_footer"><i class="fa fa-bar-chart"></i></div>
+                                <div class="text_footer">Profile</div>
+                            </button>
+                        </label>
+                        <label onclick="rank();" class="topcoat-tab-bar__item">
+                            
+                            <button id="rank" onclick="removeClass('is-active'); addClass(this,'is-active');" class="topcoat-tab-bar__button full">
+                                <div class="icono_footer"><i class="fa fa-trophy"></i></div>
+                                <div class="text_footer">Rank</div>
+                            </button>
+                        </label>
+                        <label onclick="settings();" class="topcoat-tab-bar__item">
+                            
+                            <button id="settings" onclick="removeClass('is-active'); addClass(this,'is-active');" class="topcoat-tab-bar__button full">
+                                <div class="icono_footer"><i class="fa fa-cogs"></i></div>
+                                <div class="text_footer">Settings</div>
+                            </button>
+                        </label>
+                    </div>
+                    <div class="info_footer">
+                        <p class="font_info_footer">AlertoSoccer is sponsored by RTScores.com</p> 
+                    </div>       
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

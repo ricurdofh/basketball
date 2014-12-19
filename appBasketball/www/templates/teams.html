@@ -1,0 +1,26 @@
+<tr id="activaDetailsA759">
+    <td class="space_time_estatus">
+        {{#if time}}
+        <div id="tiempo0" class="center">{{time}}</div>
+        {{else}}
+        <div id="estado0" class="center color_gris list_estatus">
+            <i class="fa fa-clock-o"></i>
+        </div>
+        {{/if}}
+    </td>
+    <td id="" class="space_result">
+        <div class="center">{{totalPoints}}</div>
+    </td>
+    <td class="raya" rowspan="1"></td>
+    <td class="list_equipos">
+        <div id="Equipo{{teamType}}" class="equipo{{toLowerCase teamType}}">
+            <!--<img src="img/banderas/brasil_bandera.jpg" class="bandera_equipos">-->
+            {{team}}
+        </div>
+    </td>
+    <td class="list_options">
+        <div class="center color_gris">
+            <i class="fa fa-eye fa-1x"></i>
+        </div>
+    </td>
+</tr>
