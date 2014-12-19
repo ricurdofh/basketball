@@ -143,7 +143,7 @@
             <tr onclick="showClassif('{{league}}')">
                 <td colspan="5">
                     <div class="liga list_liga">
-                        <img src="img/banderas/brasil_bandera.jpg" class="bandera_liga"> 
+                        <!--<img src="img/banderas/brasil_bandera.jpg" class="bandera_liga"> -->
                         {{league}}
                         <div onclick="showClassif('{{league}}')" class="tablaClas color_gris">
                             <i class="fa fa-trophy"></i>
@@ -165,12 +165,12 @@
                     {{/if}}
                 </td>
                 <td id="" class="space_result">
-                    <div class="center">{{result}}</div>
+                    <div class="center">{{totalPoints}}</div>
                 </td>
                 <td class="raya" rowspan="1"></td>
                 <td class="list_equipos">
                     <div id="Equipo{{teamType}}" class="equipo{{toLowerCase teamType}}">
-                        <img src="img/banderas/brasil_bandera.jpg" class="bandera_equipos">
+                        <!--<img src="img/banderas/brasil_bandera.jpg" class="bandera_equipos">-->
                         {{team}}
                     </div>
                 </td>

@@ -4,25 +4,6 @@ var jsdom = require('jsdom'),
     Games = require('../models/dbGames'),
     Leagues = require('../models/dbLeagues');
 
-var addData = function (game, teamData, $) {
-    var pos = teamData.pos,
-        periodPoints = teamData.periodPoints;
-
-    if (teamData.time !== undefined) {
-        game.time = teamData.time;
-        game.isLive = teamData.isLive;
-    }
-    game['team' + pos] = teamData.name;
-    game['totalPoints' + pos] = teamData.totalPoints;
-    game['firstPeriodPoints' + pos] = $(periodPoints[0]).text().trim();
-    game['secondPeriodPoints' + pos] = $(periodPoints[1]).text().trim();
-    game['thirdPeriodPoints' + pos] = $(periodPoints[2]).text().trim();
-    game['fourthPeriodPoints' + pos] = $(periodPoints[3]).text().trim();
-    game['fifthPeriodPoints' + pos] = $(periodPoints[4]).text().trim();
-
-    return game;
-};
-
 jsdom.env({
     url : 'http://www.livescore.com/basketball/',
     scripts : ['https://code.jquery.com/jquery-2.1.1.min.js'],
@@ -33,7 +14,9 @@ jsdom.env({
                 teamsArray = [],
                 dateCont = -1,
                 date = [],
-                league;
+                teams = {},
+                league,
+                i;
             league = $(this).find('.league strong').text() + ' ' + $(this).find('.league span a').text();
             Leagues.findOne({
                 league : league
@@ -61,7 +44,17 @@ jsdom.env({
                         isLive = $(this).find('.fd').find('img').attr('alt') === 'live',
                         team1 = $(this).find('.ft').text().trim(),
                         totalPoints1 = $(this).find('.fs').text().trim(),
-                        periodPoints1 = $(this).find('.fp');
+                        periodPoints1 = [];
+
+                    for (i = 0; i < $(this).find('.fp').length; i += 1) {
+                        periodPoints1.push($($(this).find('.fp')[i]).text().trim());
+                    }
+                    
+                    teams = {
+                        team : team1,
+                        totalPoints : totalPoints1,
+                        periodPoints : periodPoints1
+                    };
 
                     // Se guardan en un arreglo para poder acceder a los datos luego en el
                     // closure de la función callback del query a la bd
@@ -70,34 +63,49 @@ jsdom.env({
                     teamsArray[cont].date = date[dateCont];
                     teamsArray[cont].time = time;
                     teamsArray[cont].isLive = isLive;
-                    teamsArray[cont].team1 = team1;
-                    teamsArray[cont].totalPoints1 = totalPoints1;
-                    teamsArray[cont].periodPoints1 = periodPoints1;
+                    teamsArray[cont].teams = [teams];
 
                 } else if ($(this).attr('class') === 'awy ' || $(this).attr('class') === 'awy even') {
 
                     // Se obtienen datos locales del segundo de los equipos del juego
                     var team2 = $(this).find('.ft').text().trim(),
                         totalPoints2 = $(this).find('.fs').text().trim(),
-                        periodPoints2 = $(this).find('.fp'),
+                        periodPoints2 = [],
                         localCont = cont;
                         // Esta última es una variable contadora local que identifica
                         // la posición actual en el closure de la función callback
+                    
+                    for (i = 0; i < $(this).find('.fp').length; i += 1) {
+                        periodPoints2.push($($(this).find('.fp')[i]).text().trim());
+                    }
+
+                    teams = {
+                        team : team2,
+                        totalPoints : totalPoints2,
+                        periodPoints : periodPoints2
+                    };
 
                     // Se guardan los datos del segundo equipo en el arreglo anterior
                     // para completar los datos del juego que se está procesando
-                    teamsArray[cont].team2 = team2;
-                    teamsArray[cont].totalPoints2 = totalPoints2;
-                    teamsArray[cont].periodPoints2 = periodPoints2;
+                    teamsArray[cont].teams.push(teams);
+
+                    // console.log('teams ' + teamsArray[cont].teams);
+                    // console.log('team1 ' + teamsArray[cont].teams[0].team);
 
                     Games.findOne({
                         league : teamsArray[cont].league,
-                        date : teamsArray[cont].date,
-                        team1 : teamsArray[cont].team1
-                    }, function (err, game) {
-                        var data = teamsArray[localCont],
-                            team1Data,
-                            team2Data;
+                        date : teamsArray[cont].date
+                    })
+                    .where('teams')
+                    .elemMatch({
+                        team : teamsArray[cont].teams[0].team
+                    })
+                    .where('teams')
+                    .elemMatch({
+                        team : teamsArray[cont].teams[1].team
+                    })
+                    .exec(function (err, game) {
+                        var data = teamsArray[localCont];
 
                         if (!game) {
                             game = new Games({
@@ -106,27 +114,15 @@ jsdom.env({
                             });
                         }
 
-                        team1Data = {
-                            name : data.team1,
-                            totalPoints : data.totalPoints1,
-                            periodPoints : data.periodPoints1,
-                            pos : 1,
-                            isLive : data.isLive,
-                            time : data.time
-                        };
+                        game.time = data.time;
+                        game.teams = data.teams;
+                        game.isLive = data.isLive;
 
-                        game = addData(game, team1Data, $);
-
-                        team2Data = {
-                            name : data.team2,
-                            totalPoints : data.totalPoints2,
-                            periodPoints : data.periodPoints2,
-                            pos : 2
-                        };
-
-                        game = addData(game, team2Data, $);
-
-                        game.save();
+                        game.save(function (err) {
+                            if (err) {
+                                console.error('Error ' + err);
+                            }
+                        });
                     });
                     cont += 1;
                 }

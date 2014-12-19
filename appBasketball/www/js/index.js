@@ -24,6 +24,7 @@ var app = (function ($) {
                     teamData,
                     actualLeague,
                     actualList,
+                    i = 0,
                     idLeague = game.league.replace(/ /g, '').replace(/:/g,'');
                 if (anterior !== game.league) {
                     actualList = listLeague;
@@ -35,22 +36,14 @@ var app = (function ($) {
                     $(actualList).find('table tbody').append(separador);
                 }
                 
-                teamData = {
-                    time : game.time,
-                    team : game.team1,
-                    teamType : 'A',
-                    result : game.totalPoints1 || '-'
-                };
-                team = teams(teamData);
-                $(actualList).find('table tbody').append(team);
-
-                teamData = {
-                    team : game.team2,
-                    teamType : 'B',
-                    result : game.totalPoints2 || '-'
-                };
-                team = teams(teamData);
-                $(actualList).find('table tbody').append(team);
+                game.teams[0].time = game.time;
+                game.teams[0].teamType = 'A';
+                game.teams[1].teamType = 'B';
+                
+                for (i; i < 2; i+=1) {
+                    team = teams(game.teams[i]);
+                    $(actualList).find('table tbody').append(team);
+                }
 
                 ulList.append(actualList);
                 anterior = game.league;
