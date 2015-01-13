@@ -1,7 +1,7 @@
 var app = (function ($) {
-    var server = 'http://192.168.0.104:3000';
+    var _server = 'http://192.168.0.104:3000';
 
-    var orderTeams = function (a, b) {
+    var _orderTeams = function (a, b) {
         if (a.points > b.points) {
             return -1;
         }
@@ -18,7 +18,45 @@ var app = (function ($) {
         }
         return 0;
     };
-    
+
+    var _loadStruct = function (header) {
+        var appStructure = $('#appStructure-template').html(),
+            headerTemplate = Handlebars.compile($('#header-template').html()),
+            data = { header : header };
+
+
+        $('#app').empty();
+        $('#app').append(appStructure);
+
+        _loadHead(header);
+        _loadFoot();
+
+    };
+
+    var _loadHead = function (header) {
+        var headerTemplate = Handlebars.compile($('#header-template').html()),
+            data = { header : header };
+
+        headerTemplate = headerTemplate(data);
+        
+        $('.struct_table_header').empty();
+        $('.struct_table_header').append(headerTemplate);
+    };
+
+    var _loadFoot = function () {
+        var footerTemplate = $('#footer-template').html();
+
+        $('.struct_table_footer').empty();
+        $('.struct_table_footer').append(footerTemplate);
+    };
+
+    var _loading = function () {
+        var divLoading = $('#loading-template').html();
+
+        $('.struct_table_container').empty();
+        $('.struct_table_container').append(divLoading);
+    };
+
     return {
         // Application Constructor
         initialize: function() {
@@ -47,13 +85,15 @@ var app = (function ($) {
             });
         },
         startApp: function() {
+            _loadStruct('games');
             this.loadGames();
         },
         loadGames : function () {
             $.ajax({
                 type : 'GET',
-                url : server,
-                dataType : 'json'
+                url : _server,
+                dataType : 'json',
+                beforeSend : _loading
             })
             .done(function (data) {
                 var gamesBody = $('#gamesBody-template').html(),
@@ -64,8 +104,10 @@ var app = (function ($) {
                     ulList,
                     anterior = '';
 
-                $('#app').empty();
-                $('#app').append(gamesBody);
+                _loadHead('games');
+
+                $('.struct_table_container').empty();
+                $('.struct_table_container').append(gamesBody);
                 ulList = $('#lista');
 
                 $(data).each(function () {
@@ -86,12 +128,10 @@ var app = (function ($) {
                         $(actualList).find('table tbody').append(separator);
                     }
                     
-                    game.teams[0].time = game.time;
-                    game.teams[0].teamType = 'A';
-                    game.teams[1].teamType = 'B';
-                    
                     for (i; i < 2; i+=1) {
-                        team = teams(game.teams[i]);
+                        game.teamType = (i === 0) ? 'A' : 'B';
+                        game.currentTeam = game.teams[i];
+                        team = teams(game);
                         $(actualList).find('table tbody').append(team);
                     }
 
@@ -103,8 +143,9 @@ var app = (function ($) {
         showClassif : function (league) {
             $.ajax({
                 type : 'GET',
-                url : server + '/classifications/' + league,
-                dataType : 'json'
+                url : _server + '/classifications/' + league,
+                dataType : 'json',
+                beforeSend : _loading
             })
             .done(function (data) {
                 var i = 0,
@@ -128,15 +169,26 @@ var app = (function ($) {
                     }
                 }
 
-                tableClassif.total.sort(orderTeams);
-                tableClassif.home.sort(orderTeams);
-                tableClassif.away.sort(orderTeams);
+                tableClassif.total.sort(_orderTeams);
+                tableClassif.home.sort(_orderTeams);
+                tableClassif.away.sort(_orderTeams);
 
                 tableReady = classifTableTemplate(tableClassif);
 
-                $('#app').empty();
-                $('#app').append(tableReady);
+                _loadHead('classif');
+
+                $('.struct_table_container').empty();
+                $('.struct_table_container').append(tableReady);
             });
+        },
+        showDetails : function (game) {
+            var template = $('#details-template').html(),
+                detailsTemplate = Handlebars.compile(template);
+
+            _loadHead('classif');
+
+            $('.struct_table_container').empty();
+            $('.struct_table_container').append(detailsTemplate);
         },
         activeTab : function (elem) {
             var idShow,
@@ -155,10 +207,20 @@ var app = (function ($) {
     };
 }(jQuery));
 
+/***** Helpers para Handlebars ******/
+
 Handlebars.registerHelper('toLowerCase', function (str) {
   return str.toLowerCase();
 });
 
 Handlebars.registerHelper('inc', function (val) {
     return val + 1;
-})
+});
+
+Handlebars.registerHelper('eq', function (lval, rval, options) {
+    return (lval === rval) ? options.fn(this) : options.inverse(this);
+});
+
+Handlebars.registerHelper("getContext", function() {
+    return JSON.stringify(this);
+});
