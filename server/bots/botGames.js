@@ -22,7 +22,7 @@ var find_games = function () {
                 Leagues.findOne({
                     league : league
                 }, function (err, exist) {
-                    if(!exist) {
+                    if (!exist) {
                         exist = new Leagues({
                             league : league,
                             hasConf : false,
@@ -50,7 +50,7 @@ var find_games = function () {
                         for (i = 0; i < $(this).find('.fp').length; i += 1) {
                             periodPoints1.push($($(this).find('.fp')[i]).text().trim());
                         }
-                        
+
                         teams = {
                             team : team1,
                             totalPoints : totalPoints1,
@@ -75,7 +75,7 @@ var find_games = function () {
                             localCont = cont;
                             // Esta última es una variable contadora local que identifica
                             // la posición actual en el closure de la función callback
-                        
+
                         for (i = 0; i < $(this).find('.fp').length; i += 1) {
                             periodPoints2.push($($(this).find('.fp')[i]).text().trim());
                         }
@@ -96,16 +96,15 @@ var find_games = function () {
                         Games.findOne({
                             league : teamsArray[cont].league,
                             date : teamsArray[cont].date
-                        })
-                        .where('teams')
-                        .elemMatch({
+                        }).where(
+                            'teams'
+                        ).elemMatch({
                             team : teamsArray[cont].teams[0].team
-                        })
-                        .where('teams')
-                        .elemMatch({
+                        }).where(
+                            'teams'
+                        ).elemMatch({
                             team : teamsArray[cont].teams[1].team
-                        })
-                        .exec(function (err, game) {
+                        }).exec(function (err, game) {
                             var data = teamsArray[localCont];
 
                             if (!game) {

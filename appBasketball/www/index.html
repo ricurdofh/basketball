@@ -22,6 +22,12 @@
 
         <div id='app' class="container full_alto"></div>
 
+        <script id="appStructure-template" type="text/x-handlebars-template" src="templates/appStructure.html">
+        </script>
+
+        <script id="header-template" type="text/x-handlebars-template" src="templates/header.html">
+        </script>
+
         <script id="gamesBody-template" type="text/x-handlebars-template" src="templates/gamesBody.html">
         </script>
 
@@ -40,10 +46,23 @@
         <script id="classifTable-template" type="text/x-handlebars-template" src="templates/classifTable.html">
         </script>
 
+        <script id="details-template" type="text/x-handlebars-template" src="templates/details.html">
+        </script>
+
+        <script id="loading-template" type="text/x-handlebars-template" src="templates/loading.html">
+        </script>
+
+        <script id="footer-template" type="text/x-handlebars-template" src="templates/footer.html">
+        </script>
+
         <script type="text/javascript" src="cordova.js"></script>
         <script src="js/vendor/jquery-2.1.1.min.js"></script>
         <script src="js/vendor/handlebars-v2.0.0.js"></script>
+        <script src="js/vendor/sammy-latest.min.js"></script>
+        <script src="js/vendor/search.js"></script>
+        <script src="js/handlebars-helpers.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
+        <script type="text/javascript" src="js/routes/routes.js"></script>
         <script type="text/javascript">
             app.initialize();
         </script>

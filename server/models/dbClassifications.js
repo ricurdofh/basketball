@@ -18,7 +18,7 @@ var classificationsSchema = db.Schema({
     goalsFor : Number,
     goalsAgainst : Number,
     goalsDiff : Number,
-    points : Number,
+    points : Number
 });
 
 module.exports = db.model('classifications', classificationsSchema);

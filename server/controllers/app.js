@@ -1,18 +1,20 @@
+'use strict';
+
 var Games = require('../models/dbGames'),
     Classifications = require('../models/dbClassifications'),
     Leagues = require('../models/dbLeagues');
 
 var monthsNames = [
-    'January', 
-    'February', 
-    'March', 
-    'April', 
-    'May', 
-    'June', 
-    'July', 
-    'August', 
-    'September', 
-    'October', 
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
     'Nobember',
     'December'
 ];
@@ -26,7 +28,7 @@ var appController = function (app) {
         }).sort({
             league : 1
         }).exec(function (err, games) {
-            if(!err) {
+            if (!err) {
                 res.json(games);
             }
         });
@@ -35,9 +37,10 @@ var appController = function (app) {
     app.get('/classifications/:league', function (req, res) {
         Classifications.find({
             league : req.params.league
-        })
-        .populate('league_id', 'hasConf hasDiv')
-        .exec(function (err, classif) {
+        }).populate(
+            'league_id',
+            'hasConf hasDiv'
+        ).exec(function (err, classif) {
             res.json(classif);
         });
     });

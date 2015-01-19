@@ -4,7 +4,7 @@ var db = require('./dbConnection');
 
 var leaguesSchema = db.Schema({
     league : String,
-    hasConf :Boolean,
+    hasConf : Boolean,
     hasDiv : Boolean
 });
 
