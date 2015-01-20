@@ -1,104 +1,98 @@
 <td>                      
     <div id="container" class="sixteen columns container_dinamic fondo_container" style="height: 100%;">
-        <table width="100%">
-            <tbody>
-                <tr class="">
-                    <td class="ligaTablaClass" colspan="3">
-                        {{league}}
-                    </td>
-                </tr>
-                <tr class="">
-                    <td id="total" class="center fonttc activetc" onclick="app.activeTab(this, 'home', 'away');">
-                        Total
-                    </td>
-                    <td id="home" class="center fonttc" onclick="app.activeTab(this, 'total', 'away');">
-                        Home
-                    </td>
-                    <td id="away" class="center fonttc" onclick="app.activeTab(this, 'total', 'home');">
-                        Away
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="3">
-                        <table id="tableHeadTHA" width="100%">
-                            <thead>
-                                <tr>
-                                    <th class="cincoPorNum">#</th>
-                                    <th class="nameTeamPor">Team Name</th>
-                                    <th class="paPor">P</th>
-                                    <th class="paPor">W</th>
-                                    <th class="paPor">L</th>
-                                    <th class="paPor">F</th>
-                                    <th class="paPor">A</th>
-                                    <th class="paPor">GD</th>
-                                    <th class="ptsPor">Per</th>
-                                </tr>
-                            </thead>
-                        </table>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="3">
-                        <div id="contentTotal" class="contentTC" style="display: block;">
-                            <table id="tableTotal" width="100%">
-                                <tbody>
-                                    {{#each total}}
-                                    <tr class="borderBottomTd">
-                                        <td class="cincoPorNum center">{{inc @index}}</td>
-                                        <td class="nameTeamPor center">{{team}}</td>
-                                        <td class="paPor center">{{played}}</td>
-                                        <td class="paPor center">{{wins}}</td>
-                                        <td class="paPor center">{{losts}}</td>
-                                        <td class="paPor center">{{goalsFor}}</td>
-                                        <td class="paPor center">{{goalsAgainst}}</td>
-                                        <td class="paPor center">{{goalsDiff}}</td>
-                                        <td class="paPor center">{{points}}</td>
+        <div id="wrapperDetails">
+            <table width="100%">
+                <tbody>
+                    <tr class="">
+                        <td class="ligaTablaClass" colspan="3">{{league}}</td>
+                    </tr>
+                    <tr class="">
+                        <td id="total" class="center fonttc activetc" onclick="app.activeTab(this, 'home', 'away');">Total</td>
+                        <td id="home" class="center fonttc" onclick="app.activeTab(this, 'total', 'away');">Home</td>
+                        <td id="away" class="center fonttc" onclick="app.activeTab(this, 'total', 'home');">Away</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <table id="tableHeadTHA" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th class="cincoPorNum">#</th>
+                                        <th class="nameTeamPor">Team Name</th>
+                                        <th class="paPor">P</th>
+                                        <th class="paPor">W</th>
+                                        <th class="paPor">L</th>
+                                        <th class="paPor">F</th>
+                                        <th class="paPor">A</th>
+                                        <th class="paPor">GD</th>
+                                        <th class="ptsPor">Per</th>
                                     </tr>
-                                    {{/each}}
-                                </tbody>
+                                </thead>
                             </table>
-                        </div>
-                        <div id="contentHome" class="contentTC" style="display: none;">
-                            <table id="tableHome" width="100%">
-                                <tbody>
-                                    {{#each home}}
-                                    <tr class="borderBottomTd">
-                                        <td class="cincoPorNum center">{{inc @index}}</td>
-                                        <td class="nameTeamPor center">{{team}}</td>
-                                        <td class="paPor center">{{played}}</td>
-                                        <td class="paPor center">{{wins}}</td>
-                                        <td class="paPor center">{{losts}}</td>
-                                        <td class="paPor center">{{goalsFor}}</td>
-                                        <td class="paPor center">{{goalsAgainst}}</td>
-                                        <td class="paPor center">{{goalsDiff}}</td>
-                                        <td class="paPor center">{{points}}</td>
-                                    </tr>
-                                    {{/each}}
-                                </tbody>
-                            </table>
-                        </div>
-                        <div id="contentAway" class="contentTC" style="display: none;">
-                            <table id="tableAway" width="100%">
-                                <tbody>
-                                    {{#each away}}
-                                    <tr class="borderBottomTd">
-                                        <td class="cincoPorNum center">{{inc @index}}</td>
-                                        <td class="nameTeamPor center">{{team}}</td>
-                                        <td class="paPor center">{{played}}</td>
-                                        <td class="paPor center">{{wins}}</td>
-                                        <td class="paPor center">{{losts}}</td>
-                                        <td class="paPor center">{{goalsFor}}</td>
-                                        <td class="paPor center">{{goalsAgainst}}</td>
-                                        <td class="paPor center">{{goalsDiff}}</td>
-                                        <td class="paPor center">{{points}}</td>
-                                    </tr>
-                                    {{/each}}
-                                </tbody>
-                            </table>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <div id="contentTotal" class="contentTC" style="display: block;">
+                                <table id="tableTotal" width="100%">
+                                    <tbody>
+                                        {{#each total}}
+                                        <tr class="borderBottomTd">
+                                            <td class="cincoPorNum center">{{inc @index}}</td>
+                                            <td class="nameTeamPor center">{{team}}</td>
+                                            <td class="paPor center">{{played}}</td>
+                                            <td class="paPor center">{{wins}}</td>
+                                            <td class="paPor center">{{losts}}</td>
+                                            <td class="paPor center">{{goalsFor}}</td>
+                                            <td class="paPor center">{{goalsAgainst}}</td>
+                                            <td class="paPor center">{{goalsDiff}}</td>
+                                            <td class="paPor center">{{points}}</td>
+                                        </tr>
+                                        {{/each}}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div id="contentHome" class="contentTC" style="display: none;">
+                                <table id="tableHome" width="100%">
+                                    <tbody>
+                                        {{#each home}}
+                                        <tr class="borderBottomTd">
+                                            <td class="cincoPorNum center">{{inc @index}}</td>
+                                            <td class="nameTeamPor center">{{team}}</td>
+                                            <td class="paPor center">{{played}}</td>
+                                            <td class="paPor center">{{wins}}</td>
+                                            <td class="paPor center">{{losts}}</td>
+                                            <td class="paPor center">{{goalsFor}}</td>
+                                            <td class="paPor center">{{goalsAgainst}}</td>
+                                            <td class="paPor center">{{goalsDiff}}</td>
+                                            <td class="paPor center">{{points}}</td>
+                                        </tr>
+                                        {{/each}}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div id="contentAway" class="contentTC" style="display: none;">
+                                <table id="tableAway" width="100%">
+                                    <tbody>
+                                        {{#each away}}
+                                        <tr class="borderBottomTd">
+                                            <td class="cincoPorNum center">{{inc @index}}</td>
+                                            <td class="nameTeamPor center">{{team}}</td>
+                                            <td class="paPor center">{{played}}</td>
+                                            <td class="paPor center">{{wins}}</td>
+                                            <td class="paPor center">{{losts}}</td>
+                                            <td class="paPor center">{{goalsFor}}</td>
+                                            <td class="paPor center">{{goalsAgainst}}</td>
+                                            <td class="paPor center">{{goalsDiff}}</td>
+                                            <td class="paPor center">{{points}}</td>
+                                        </tr>
+                                        {{/each}}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </td>

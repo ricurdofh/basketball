@@ -1,6 +1,8 @@
 (function () {
+    'use strict';
+
     var sam = Sammy.apps.body;
-     
+
     sam.get('#/', function () {
         app.loadGames();
     });

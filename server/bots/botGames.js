@@ -6,9 +6,11 @@ var request = require('request'),
     Leagues = require('../models/dbLeagues');
 
 var find_games = function () {
+    console.log('Entra find_games');
     var url = 'http://www.livescore.com/basketball/';
     request(url, function (err, resp, html) {
         if (!err && resp.statusCode === 200) {
+            console.log('200 url: ' + url);
             var $ = cheerio.load(html);
             $('.league-multi').each(function () {
                 var cont = 0,
@@ -19,6 +21,7 @@ var find_games = function () {
                     league,
                     i;
                 league = $(this).find('.league strong').text() + ' ' + $(this).find('.league span a').text();
+                league = league.trim();
                 Leagues.findOne({
                     league : league
                 }, function (err, exist) {
@@ -121,6 +124,8 @@ var find_games = function () {
                             game.save(function (err) {
                                 if (err) {
                                     console.error('Error ' + err);
+                                } else {
+                                    console.log('Guarda ' + JSON.stringify(data));
                                 }
                             });
                         });
@@ -136,3 +141,5 @@ var find_games = function () {
 };
 
 find_games();
+
+module.exports = find_games;

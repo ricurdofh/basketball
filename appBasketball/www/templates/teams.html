@@ -1,5 +1,5 @@
-<tr id="activaDetailsA759">
-    <td class="space_time_estatus {{#if isLive}}fondo_live{{/if}}">
+<tr id="{{currentTeam.id}}">
+    <td class="space_time_estatus{{#if isLive}} fondo_live{{/if}}">
         {{#eq teamType 'A'}}
             {{#eq time 'FT'}}
             <div id="tiempo19" class="center">--:--</div>
@@ -20,20 +20,19 @@
         </div>
         {{/eq}}
     </td>
-    <td id="" class="space_result {{#if isLive}}fondo_live{{/if}}">
+    <td id="resultadoA0" class="space_result{{#if isLive}} fondo_live{{/if}}">
         <div class="center">{{currentTeam.totalPoints}}</div>
     </td>
-    <td class="raya" rowspan="1"></td>
+    {{#eq teamType 'A'}}
+    <td class="raya" rowspan="2"></td>
+    {{/eq}}
     <td class="list_equipos">
-        <div id="Equipo{{teamType}}" class="equipo{{toLowerCase teamType}}">
-            <!--<img src="img/banderas/brasil_bandera.jpg" class="bandera_equipos">-->
-            {{currentTeam.team}}
-        </div>
+        <div id="Equipo{{teamType}}" class="equipo{{toLowerCase teamType}}">{{currentTeam.team}}</div>
     </td>
     <td class="list_options">
         <div class="center color_gris">
             {{#eq teamType 'A'}}
-            <div class="center color_gris" onclick="window.location.href='#/details/{{getContext}}'">
+            <div id="details" class="center color_gris" onclick="window.location.href='#/details/{{getContext}}'">
                 <i class="fa fa-eye fa-1x"></i>
             </div>
             {{else}}

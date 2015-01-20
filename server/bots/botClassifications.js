@@ -158,6 +158,7 @@ var find_classifications = function () {
             $('.content').find('.league-multi').find('span').each(function () {
                 if ($(this).attr('class') === undefined) {
                     league = $(this).parent().find('strong').text() + ' ' + $(this).find('a').text();
+                    league = league.trim();
                     urlTotal = url + $(this).find('a').attr('href') + '?lt=1';
                     // makeTable(urlTotal, league, 'total', 'league');
                     setTimeout(makeTable.bind(null, urlTotal, league, 'total', 'league'), 2000);
@@ -177,4 +178,6 @@ var find_classifications = function () {
     });
 };
 
-find_classifications();
+// find_classifications();
+
+module.exports = find_classifications;

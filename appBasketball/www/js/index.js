@@ -3,6 +3,7 @@ var app = (function ($) {
 
     var _server = 'http://192.168.0.111:3000',
         _sam = Sammy('body'),
+        _io = io.connect(_server),
 
         _orderTeams = function (a, b) {
             if (a.points > b.points) {
@@ -55,6 +56,89 @@ var app = (function ($) {
 
             $('.struct_table_container').empty();
             $('.struct_table_container').append(divLoading);
+        },
+
+        _loadGames = function (data) {
+            var gamesBody = $('#gamesBody-template').html(),
+                listLeague = $('#listLeague-template').html(),
+                league = Handlebars.compile($('#league-template').html()),
+                teams = Handlebars.compile($('#teams-template').html()),
+                separator = $('#separator-template').html(),
+                ulList,
+                anterior = '';
+
+            _loadHead('games');
+
+            $('.struct_table_container').empty();
+            $('.struct_table_container').append(gamesBody);
+            ulList = $('#lista');
+
+            $(data).each(function (index, game) {
+                var team,
+                    actualLeague,
+                    actualList,
+                    i = 0,
+                    idLeague = game.league.replace(/ /g, '').replace(/:/g, '');
+                if (anterior !== game.league) {
+                    actualList = listLeague;
+                    actualList = $(actualList).attr('id', idLeague);
+                    actualLeague = league(game);
+                    $(actualList).find('table tbody').append(actualLeague);
+                } else {
+                    actualList = $('#' + idLeague);
+                    $(actualList).find('table tbody').append(separator);
+                }
+
+                for (i; i < 2; i += 1) {
+                    game.teamType = (i === 0) ? 'A' : 'B';
+                    game.currentTeam = game.teams[i];
+                    game.currentTeam.id = game.currentTeam.team.replace(/ /g, '');
+                    team = teams(game);
+                    $(actualList).find('table tbody').append(team);
+                }
+
+                ulList.append(actualList);
+                anterior = game.league;
+            });
+
+            Search("searchbox", "lista", "search_list", function (element) {
+                element.innerHTML += ' - enter';
+            });
+        },
+
+        _updateGames = function (data) {
+            $(data).each(function (index, game) {
+                var teamA = $('#' + game.teams[0].team.replace(/ /g, '')),
+                    teamB = $('#' + game.teams[1].team.replace(/ /g, ''));
+
+                if (game.isLive) {
+                    if(teamA.find('.space_time_estatus').hasClass('fondo_live')) {
+                        teamA.find('#tiempo0').html(game.time);
+                        teamA.find('#resultadoA0 div').html(game.teams[0].totalPoints);
+                        teamB.find('#resultadoA0 div').html(game.teams[1].totalPoints);
+                    } else {
+                        teamA.find('.space_time_estatus').addClass('fondo_live');
+                        teamA.find('#resultadoA0').addClass('fondo_live');
+                        teamB.find('.space_time_estatus').addClass('fondo_live');
+                        teamB.find('#resultadoA0').addClass('fondo_live');
+                        teamB.find('#estado0').html('<i class="fa fa-fire"></i>');
+                        teamA.find('#tiempo0').html(game.time);
+                        teamA.find('#resultadoA0 div').html(game.teams[0].totalPoints);
+                        teamB.find('#resultadoA0 div').html(game.teams[1].totalPoints);
+                    }
+                    teamA.find('#details').attr('onclick', "window.location.href='#/details/" + JSON.stringify(game) + "'");
+                } else if(teamA.find('.space_time_estatus').hasClass('fondo_live')) {
+                    teamA.find('.space_time_estatus').removeClass('fondo_live');
+                    teamA.find('#resultadoA0').removeClass('fondo_live');
+                    teamB.find('.space_time_estatus').removeClass('fondo_live');
+                    teamB.find('#resultadoA0').removeClass('fondo_live');
+                    teamB.find('#estado0').replaceWith('<div id="estado17" class="center color_gris list_estatus">F</div>');
+                    teamA.find('#tiempo0').replaceWith('<div id="tiempo19" class="center">--:--</div>');
+                    teamA.find('#resultadoA0 div').html(game.teams[0].totalPoints);
+                    teamB.find('#resultadoA0 div').html(game.teams[1].totalPoints);
+                    teamA.find('#details').attr('onclick', "window.location.href='#/details/" + JSON.stringify(game));
+                }
+            });
         };
 
     return {
@@ -95,51 +179,10 @@ var app = (function ($) {
                 dataType : 'json',
                 beforeSend : _loading
             }).done(function (data) {
-                var gamesBody = $('#gamesBody-template').html(),
-                    listLeague = $('#listLeague-template').html(),
-                    league = Handlebars.compile($('#league-template').html()),
-                    teams = Handlebars.compile($('#teams-template').html()),
-                    separator = $('#separator-template').html(),
-                    ulList,
-                    anterior = '';
+                _io.on('games', _updateGames);
 
-                _loadHead('games');
-
-                $('.struct_table_container').empty();
-                $('.struct_table_container').append(gamesBody);
-                ulList = $('#lista');
-
-                $(data).each(function () {
-                    var game = arguments[1],
-                        team,
-                        actualLeague,
-                        actualList,
-                        i = 0,
-                        idLeague = game.league.replace(/ /g, '').replace(/:/g, '');
-                    if (anterior !== game.league) {
-                        actualList = listLeague;
-                        actualList = $(actualList).attr('id', idLeague);
-                        actualLeague = league(game);
-                        $(actualList).find('table tbody').append(actualLeague);
-                    } else {
-                        actualList = $('#' + idLeague);
-                        $(actualList).find('table tbody').append(separator);
-                    }
-
-                    for (i; i < 2; i += 1) {
-                        game.teamType = (i === 0) ? 'A' : 'B';
-                        game.currentTeam = game.teams[i];
-                        team = teams(game);
-                        $(actualList).find('table tbody').append(team);
-                    }
-
-                    ulList.append(actualList);
-                    anterior = game.league;
-                });
-
-                Search("searchbox", "lista", "search_list", function (element) {
-                    element.innerHTML += ' - enter';
-                });
+                _loadGames(data);
+                
             });
         },
         showClassif : function (league) {
@@ -149,6 +192,14 @@ var app = (function ($) {
                 dataType : 'json',
                 beforeSend : _loading
             }).done(function (data) {
+
+                console.log(data);
+
+                if ($.isEmptyObject(data)) {
+                    alert('There is no classification table available');
+                    _sam.setLocation('#/');
+                }
+
                 var i = 0,
                     tableClassif = {},
                     template = $('#classifTable-template').html(),

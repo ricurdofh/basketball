@@ -1,3 +1,5 @@
+/*jslint node: true, nomen: true, regexp: true, unparam: true */
+
 'use strict';
 
 var db = require('./dbConnection');
