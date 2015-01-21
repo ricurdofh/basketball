@@ -36,6 +36,8 @@ html,body {
 	width: 100% !important;
 	height: 44px;
 	padding: 0;
+	position: relative;
+	z-index: 2;
 }
 
 .table_struct {
@@ -53,10 +55,22 @@ html,body {
 	line-height: 20px;
 }
 /* TABLE */
-#wrapper {
+#wrapperResp {
 	position: absolute;
 	z-index: 1;
 	top: 67px;
+	bottom: 60px;
+	left: 0;
+	width: 100%;
+	background: #FEFEFE;
+	overflow: scroll;
+	border-top: 1px solid #C1C1C1;
+	font-size: 15px;
+}
+#wrapper {
+	position: absolute;
+	z-index: 1;
+	top: 30px;
 	bottom: 60px;
 	left: 0;
 	width: 100%;
@@ -78,6 +92,18 @@ html,body {
 	border-top: 1px solid #C1C1C1;
 	font-size: 15px;
 	text-align: left;
+}
+
+#wrapperMain {
+	background: #FEFEFE;
+	border-top: 1px solid #C1C1C1;
+	bottom: 0px;
+	font-size: 15px;
+	left: 0;
+	position: absolute;
+	top: 39px;
+	width: 100%;
+	z-index: 1;
 }
 
 #wrapperDetails {

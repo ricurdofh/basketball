@@ -25,11 +25,10 @@ app.listen(3000, function () {
     //para que ejecute los bots y un aviso por socket a los clientes 
     //cada cierto tiempo desde que se corre el server
     //Aún en pruebas.......
-    var gameJob = new CronJob('10 * * * * *', function () {
-        console.log('Games');
-        gamesSocket(app);
-    }, function () {
-    }, true);
+    var gameJob = new CronJob('50 * * * * *', function() { 
+        botGames();
+        gamesSocket(app)
+    }, null, true);
     gameJob.start();
 
 });
