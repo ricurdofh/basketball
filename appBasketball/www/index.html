@@ -16,7 +16,7 @@
         <!-- Calendario -->
         <link rel="stylesheet" type="text/css" href="css/calendario.css" />
         <!-- Fonts -->
-        <link rel="stylesheet" type="text/css" href="font-awesome-4.2.0/css/font-awesome.css" />
+        <link rel="stylesheet" type="text/css" href="font-awesome-4.2.0/css/font-awesome.min.css" />
         <link rel="stylesheet" type="text/css" href="fonts/stylesheet.css" />      
         <title>appBasketball</title>
     </head>
@@ -54,15 +54,20 @@
         <script id="loading-template" type="text/x-handlebars-template" src="templates/loading.html">
         </script>
 
+        <script id="calendar-template" type="text/x-handlebars-template" src="templates/calendar.html">
+        </script>
+
         <script id="footer-template" type="text/x-handlebars-template" src="templates/footer.html">
         </script>
 
         <script type="text/javascript" src="cordova.js"></script>
         <script src="http://192.168.0.111:3000/socket.io/socket.io.js"></script>
         <script src="js/vendor/jquery-2.1.1.min.js"></script>
-        <script src="js/vendor/handlebars-v2.0.0.js"></script>
+        <script src="js/vendor/handlebars.min.js"></script>
         <script src="js/vendor/sammy-latest.min.js"></script>
-        <script src="js/vendor/search.js"></script>
+        <script src="js/vendor/search.min.js"></script>
+        <script src="js/vendor/fastclick.min.js"></script>
+        <script src="js/vendor/calendario.js"></script>
         <script src="js/handlebars-helpers.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
         <script type="text/javascript" src="js/routes/routes.js"></script>

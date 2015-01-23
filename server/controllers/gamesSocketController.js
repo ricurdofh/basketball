@@ -1,26 +1,11 @@
 'use strict';
 
 var Games = require('../models/dbGames'),
-    monthsNames = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'Nobember',
-    'December'
-];
+    todayDate = require('./globals').getTodayDate();
 
 var gamesSocketController = function (app) {
-    var date = new Date(),
-        dateSearch = monthsNames[date.getMonth()] + ' ' + date.getDate();
     Games.find({
-        date : dateSearch
+        date : todayDate
     }).sort({
         league : 1
     }).exec(function (err, games) {

@@ -1,46 +1,24 @@
-/*jslint node:true*/
 'use strict';
 
 var request = require('request'),
     cheerio = require('cheerio'),
     Games = require('../models/dbGames'),
     Leagues = require('../models/dbLeagues'),
-    todayDate = new Date(),
-    monthsNames = [
-        'January',
-        'February',
-        'March',
-        'April',
-        'May',
-        'June',
-        'July',
-        'August',
-        'September',
-        'October',
-        'Nobember',
-        'December'
-    ];
+    todayDate = require('../controllers/globals').getTodayDate();
 
-todayDate = monthsNames[todayDate.getMonth()] + ' ' + todayDate.getDate();
-console.log('today ' + todayDate);
-
-var find_games = function () {
+var find_games = function (date) {
     console.log('Entra find_games');
-    var url = 'http://www.livescore.com/basketball/';
+    date = date || todayDate;
+    var url = 'http://www.livescore.com/basketball/' + date;
     request(url, function (err, resp, html) {
-        console.log('err ' + err);
-        // console.log('resp ' + JSON.stringify(resp));
-        // console.log('html ' + err);
         if (!err && resp.statusCode === 200) {
-            console.log('200 url: ' + url);
+            console.log('Games 200 url: ' + url);
             var $ = cheerio.load(html),
                 teamsObj = {};
             $('.content>div').each(function () {
                 var cont = 0,
-                    date = "",
-                    league = '',
-                    i;
-                    
+                    league = '';
+
                 if ($(this).attr('class') === 'row row-tall mt4') {
                     $(this).find('.left a').each(function () {
                         if ($(this).find('strong').text()) {
@@ -55,24 +33,26 @@ var find_games = function () {
                     Leagues.findOne({
                         league : league
                     }, function (err, exist) {
-                        if (!exist) {
-                            exist = new Leagues({
-                                league : league,
-                                hasConf : false,
-                                hasDiv : false
-                            });
-                            exist.save();
+                        if (!err) {
+                            if (!exist) {
+                                exist = new Leagues({
+                                    league : league,
+                                    hasConf : false,
+                                    hasDiv : false
+                                });
+                                exist.save();
+                            }
                         }
                     });
-                    $(this).find('.right.fs11').each(function () {
-                        date = $(this).text().trim() || todayDate;
-                        teamsObj.date = date;
-                    });
+                    teamsObj.date = date;
+                    // $(this).find('.right.fs11').each(function () {
+                    //     date = $(this).text().trim() || todayDate;
+                    //     teamsObj.date = date;
+                    // });
                 } else if ($(this).attr('class') === 'row-group') {
 
                     $(this).find('.row-gray').each(function () {
                         var teams = {};
-                        // console.log('teamsObj ' + JSON.stringify(teamsObj));
 
                         if (cont === 0) {
 
@@ -111,7 +91,6 @@ var find_games = function () {
                             var team2 = $(this).find('.bas-ply').text().trim(),
                                 totalPoints2 = $(this).find('.col-2.tright').text().trim(),
                                 periodPoints2 = [],
-                                localCont = cont,
                                 data;
                                 // Esta última es una variable contadora local que identifica
                                 // la posición actual en el closure de la función callback
@@ -151,26 +130,28 @@ var find_games = function () {
                             ).elemMatch({
                                 team : data.teams[1].team
                             }).exec(function (err, game) {
-                                // var data = teamsObj;
 
-                                if (!game) {
-                                    game = new Games({
-                                        league : data.league,
-                                        date : data.date
+                                if (!err) {
+
+                                    if (!game) {
+                                        game = new Games({
+                                            league : data.league,
+                                            date : data.date
+                                        });
+                                    }
+
+                                    game.time = data.time;
+                                    game.teams = data.teams;
+                                    game.isLive = data.isLive;
+
+                                    game.save(function (err) {
+                                        if (err) {
+                                            // console.error('Error ' + err);
+                                        } else {
+                                            // console.log('Guarda ' + JSON.stringify(data));
+                                        }
                                     });
                                 }
-
-                                game.time = data.time;
-                                game.teams = data.teams;
-                                game.isLive = data.isLive;
-
-                                game.save(function (err) {
-                                    if (err) {
-                                        console.error('Error ' + err);
-                                    } else {
-                                        console.log('Guarda ' + JSON.stringify(data));
-                                    }
-                                });
                             });
                         }
                     });

@@ -14,6 +14,7 @@ var classificationsSchema = db.Schema({
     type : String,
     conference : String,
     division: String,
+    position : Number,
     played : Number,
     wins : Number,
     losts : Number,

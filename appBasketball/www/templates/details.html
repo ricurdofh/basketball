@@ -1,18 +1,9 @@
 <td>
     <div id="container" class="sixteen columns container_dinamic fondo_container" style="height: 100%;">
-        <div id="wrapperDetails">
+        <div id="wrapperDetails" data="{{currentGame}}">
             <table class="tableDetails" width="100%">
                 <tbody>
                     <tr style="background: #970000;"></tr>
-              <!--       <tr>
-                        <td onclick="radioPredictions(1)" id="escudoAPredictions" style="text-align: center;" class="">
-                            <img src="img/banderas/brasil_bandera.jpg" class="banderaEquiposDetalles">
-                        </td>
-                        <td></td>
-                        <td onclick="radioPredictions(3)" id="escudoBPredictions" style="text-align: center;">
-                            <img src="img/banderas/brasil_bandera.jpg" class="banderaEquiposDetalles">
-                        </td>
-                    </tr> -->
                     <tr style="background: #970000;">
                         <td onclick="radioPredictions(1)" id="resultadoAPredictions" width="45%" class="center font_result_Details ">
                             {{#if teams.0.totalPoints}}
@@ -58,9 +49,6 @@
                     <tr>
                         <td class="center tdDetailsTop" colspan="3"></td>
                     </tr>
-                    <!-- <tr>
-                        <td class="center halftime" colspan="3">Half-Time (1 - 1)</td>
-                    </tr> -->
                     {{#if teams.0.totalPoints}}
                     <tr id="detailsTR">
                         <td class="center tdDetails" colspan="3">
@@ -72,11 +60,10 @@
                             <table id="tableDataDetails" class="dataDetails" width="100%">
                                 <tbody>
                                     <tr>
-                                        {{!-- <td class="min" width="6%">11'</td> --}}
                                         <td class="borderBottomTd" width="40%">
                                             <div class="ply tright">
                                                 <div>
-                                                    <span class="name">{{teams.0.periodPoints.[0]}}</span>
+                                                    <span class="name" id="teamAperiod1">{{teams.0.periodPoints.[0]}}</span>
                                                     <span class="ml4"></span>
                                                     <span class=""></span>
                                                 </div>
@@ -88,7 +75,7 @@
                                         <td class="borderBottomTd" width="40%">
                                             <div class="ply">
                                                 <div>
-                                                    <span class="name">{{teams.1.periodPoints.[0]}}</span>
+                                                    <span class="name" id="teamBperiod1">{{teams.1.periodPoints.[0]}}</span>
                                                     <span class="mr4"></span>
                                                     <span class=""></span>
                                                 </div>
@@ -96,11 +83,10 @@
                                         </td>
                                     </tr>
                                     <tr class="even">
-                                        {{!-- <td class="min" width="6%">31'</td> --}}
                                         <td class="borderBottomTd" width="40%">
                                             <div class="ply tright">
                                                 <div>
-                                                    <span class="name">{{teams.0.periodPoints.[1]}}</span>
+                                                    <span class="name" id="teamAperiod2">{{teams.0.periodPoints.[1]}}</span>
                                                     <span class="ml4"> </span>
                                                     <span class=""></span>
                                                 </div>
@@ -112,7 +98,7 @@
                                         <td class="borderBottomTd" width="40%">
                                             <div class="ply">
                                                 <div>
-                                                    <span class="name">{{teams.1.periodPoints.[1]}}</span>
+                                                    <span class="name" id="teamBperiod2">{{teams.1.periodPoints.[1]}}</span>
                                                     <span class="mr4"> </span>
                                                     <span class=""></span>
                                                 </div>
@@ -120,11 +106,10 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        {{!-- <td class="min" width="6%">48'</td> --}}
                                         <td class="borderBottomTd" width="40%">
                                             <div class="ply tright">
                                                 <div>
-                                                    <span class="name">{{teams.0.periodPoints.[2]}}</span>
+                                                    <span class="name" id="teamAperiod3">{{teams.0.periodPoints.[2]}}</span>
                                                     <span class="ml4"> </span>
                                                     <span class=""></span>
                                                 </div>
@@ -136,7 +121,7 @@
                                         <td class="borderBottomTd" width="40%">
                                             <div class="ply">
                                                 <div>
-                                                    <span class="name">{{teams.1.periodPoints.[2]}}</span>
+                                                    <span class="name" id="teamBperiod3">{{teams.1.periodPoints.[2]}}</span>
                                                     <span class="mr4"> </span>
                                                     <span class=""></span>
                                                 </div>
@@ -144,11 +129,10 @@
                                         </td>
                                     </tr>
                                     <tr class="even">
-                                        {{!-- <td class="min" width="6%">31'</td> --}}
                                         <td class="borderBottomTd" width="40%">
                                             <div class="ply tright">
                                                 <div>
-                                                    <span class="name">{{teams.0.periodPoints.[3]}}</span>
+                                                    <span class="name" id="teamAperiod4">{{teams.0.periodPoints.[3]}}</span>
                                                     <span class="ml4"> </span>
                                                     <span class=""></span>
                                                 </div>
@@ -160,7 +144,7 @@
                                         <td class="borderBottomTd" width="40%">
                                             <div class="ply">
                                                 <div>
-                                                    <span class="name">{{teams.1.periodPoints.[3]}}</span>
+                                                    <span class="name" id="teamBperiod4">{{teams.1.periodPoints.[3]}}</span>
                                                     <span class="mr4"> </span>
                                                     <span class=""></span>
                                                 </div>
@@ -168,11 +152,10 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        {{!-- <td class="min" width="6%">48'</td> --}}
                                         <td class="borderBottomTd" width="40%">
                                             <div class="ply tright">
                                                 <div>
-                                                    <span class="name">{{teams.0.periodPoints.[4]}}</span>
+                                                    <span class="name" id="teamAperiod5">{{teams.0.periodPoints.[4]}}</span>
                                                     <span class="ml4"> </span>
                                                     <span class=""></span>
                                                 </div>
@@ -184,7 +167,7 @@
                                         <td class="borderBottomTd" width="40%">
                                             <div class="ply">
                                                 <div>
-                                                    <span class="name">{{teams.1.periodPoints.[4]}}</span>
+                                                    <span class="name" id="teamBperiod5">{{teams.1.periodPoints.[4]}}</span>
                                                     <span class="mr4"> </span>
                                                     <span class=""></span>
                                                 </div>

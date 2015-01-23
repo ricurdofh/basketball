@@ -14,4 +14,13 @@
     sam.get('#/details/:game', function () {
         app.showDetails(this.params.game);
     });
+
+    sam.get('#/isLive', function () {
+        app.showLive();
+    });
+
+    sam.get('#/games/:date', function () {
+        ds_onclick(this.params.date);
+        app.loadGamesDate(this.params.date);
+    });
 }());

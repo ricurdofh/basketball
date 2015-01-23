@@ -5,17 +5,17 @@
         </div>
         <div id="iconos" class="iconos">
             {{#eq header 'games'}}
-            <div id="returFechaActual" style="display: none;" onclick="resetLocalStorageControlDinamico(); allMatches(); ds_hi();" class="date font_iconos">
+            <div id="returFechaActual" style="display: none;" onclick="ds_hi(); window.location.href='#/'" class="date font_iconos">
                 <i class="fa fa-times"></i> 
             </div>
-            <div onclick="ds_sh(this);" class="date font_iconos">
+            <div id="showCalendar" onclick="app.showCalendar(this);" class="date font_iconos">
                 <i class="fa fa-calendar"></i>
             </div>
             <div class="favorites font_iconos">
                 <i onclick="resetLocalStorageControlDinamico(); favoritesMatches(); ds_hi();" class="fa fa-star color_carnesi"></i>
             </div>
             <div id="all_live" class="live font_iconos">
-                <i onclick="resetLocalStorageControlDinamico(); liveMatches(); ds_hi();" class="fa fa-fire"></i>
+                <i onclick="window.location.href='#/isLive'" class="fa fa-fire"></i>
             </div>
             {{else}}
             {{#eq header 'classif'}}
